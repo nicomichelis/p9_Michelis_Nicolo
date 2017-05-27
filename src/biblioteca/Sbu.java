@@ -106,8 +106,7 @@ public class Sbu {
     	if (utenti.contains(utente)) {
     		return false;
     	}
-    	utenti.add(utente);
-    	return true;
+    	return utenti.add(utente);
     }
     
     /**

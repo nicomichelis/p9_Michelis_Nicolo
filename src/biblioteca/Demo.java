@@ -48,15 +48,15 @@ public class Demo {
 		// ---
 		System.out.println("Creo nuovo Libro in Biblioteca 1");
 		b1.getPossiede().add(new Libro("Titolo1", "Autore", "Genere", "Collocazione", b1, 012345 , "Casa Editrice", 150));
-		System.out.println("Creato!");
+		System.out.println("Creato");
 		// ---
 		System.out.println("Creo nuovo Libro in Biblioteca 1");
 		b1.getPossiede().add(new Libro("Titolo2", "Autore", "Genere", "Collocazione", b1, 012346 , "Casa Editrice", 150));
-		System.out.println("Creato!");
+		System.out.println("Creato");
 		// --
-		System.out.println("Ricerco Libro Tito");
+		System.out.println("Ricerco Libro di Autore");
 		List<Articolo> articoliTrovati = new ArrayList<Articolo>();
-		articoliTrovati = sistema.ricercaArticolo("Tito");
+		articoliTrovati = sistema.ricercaArticolo("Aut");
 		for (Articolo a:articoliTrovati) {
 			System.out.println("Trovato "+ a.getTitolo());
 		}
