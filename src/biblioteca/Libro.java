@@ -60,7 +60,7 @@ public class Libro extends Articolo {
 	 *
 	 * @param isbn isbn del libro
 	 */
-	public void setISBN(int isbn) {
+	public void setIsbn(int isbn) {
 		this.isbn = isbn;
 	}
 	

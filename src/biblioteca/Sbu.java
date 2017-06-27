@@ -38,7 +38,7 @@ public class Sbu {
      */
 	public Sbu(String nome) {
 		super();
-		this.nome = nome;
+		this.setNome(nome);
 		listaConsigli = new ArrayList<String>();
 		recensioni = new ArrayList<Recensione>();
 		utenti = new ArrayList<Persona>();
@@ -46,21 +46,28 @@ public class Sbu {
 	}
     
     /**
-     * Login (controllo username e password). Ritorna true se email e
+     * Login (controllo username e password). Ritorna la persona se email e
      * password corrispondono a quelle di una Persona contenuta nella
-     * lista utenti
+     * lista utenti, altrimenti null
      *
      * @param email email da controllare
      * @param password password da controllare
-     * @return boolean
+     * @return Persona
      */
-    public boolean login ( String email, String password ) {
+    public Persona login ( String email, String password ) {
     	for (Persona p: utenti) {
-    		if (p.getEmail().equals(email)&&p.getPassword().equals(password)) {
-    			return true;
+    		if (p.getEmail().equals(email) && p.getPassword().equals(password)) {
+    			if (p instanceof Bibliotecario)
+    				System.out.println("Benvenuto Bibliotecario");
+    			if (p instanceof UtenteRegistrato)
+    				System.out.println("Benvenuto UtenteRegistrato");
+    			if (p instanceof ManagerDiSistema)
+    				System.out.println("Benvenuto ManagerDiSistema");
+    			return p;
     		}
     	}
-    	return false;
+    	System.out.println("Errore login");
+    	return null;
     }
     
     /**
@@ -103,8 +110,10 @@ public class Sbu {
      * @return boolean
      */
     public boolean inserisciUtente ( Persona utente ) {
-    	if (utenti.contains(utente)) {
-    		return false;
+    	for (Persona p : utenti) {
+    		if (p.getCodiceFiscale().equals(utente.getCodiceFiscale())
+    				|| p.getEmail().equals(utente.getEmail()))
+    			return false;
     	}
     	return utenti.add(utente);
     }

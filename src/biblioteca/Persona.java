@@ -81,6 +81,12 @@ public abstract class Persona {
 		if (nome.contains(arg) || cognome.contains(arg)) {
 			return true;
 		}
+		if (codiceFiscale.equals(arg)) {
+			return true;
+		}
+		if (email.equals(arg)) {
+			return true;
+		}
 		return false;
     }
     

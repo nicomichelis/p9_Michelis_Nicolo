@@ -19,8 +19,6 @@ public class Recensione {
     /** Associazione fra Recensione e UtenteRegistrato */
     private UtenteRegistrato autore;
     
-    
-
     /**
      * Costruttore di Recensione
      * 
@@ -31,6 +29,14 @@ public class Recensione {
 		super();
 		this.testo = testo;
 		this.autore = autore;
+	}
+
+	/**
+     * Costruttore di default di Recensione
+     * 
+	 */
+	public Recensione() {
+		super();
 	}
 
 	/**
@@ -58,5 +64,14 @@ public class Recensione {
 	 */
 	public UtenteRegistrato getAutore() {
 		return autore;
+	}
+	
+	/**
+	 * Sets autore della recensione.
+	 *
+	 * @param autore autore della recensione
+	 */
+	public void setAutore(UtenteRegistrato autore) {
+		this.autore = autore;
 	}
 }

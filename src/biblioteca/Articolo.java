@@ -6,6 +6,7 @@
 package biblioteca;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -64,13 +65,15 @@ public abstract class Articolo {
 		this.collocazione = collocazione;
 		this.biblio = biblio;
 		prenotato = new ArrayList<UtenteRegistrato>();
+		recensioni = new ArrayList<Recensione>();
 	}
     
 	/**
      * Ricerca articolo attraverso una stringa
      *
      * @param arg stringa di ricerca dell'articolo
-     * @return boolean
+     * @return boolean true se il titolo, autore o genere
+     * contengono la stringa, false altrimenti
      */
     public boolean ricercaArticolo ( String arg ) {
 		if ((this.titolo.contains(arg)) 
@@ -87,16 +90,17 @@ public abstract class Articolo {
      * @param recensione recensione contiene la recensione e l'autore
      */
     public void inserisciRecensione ( Recensione recensione ) {
-    	for (Recensione r: recensioni) {
-    		if (r.getAutore().equals(recensione.getAutore())) {
-    			
-    			/* 
-    			 * Se l'utente ha già inserito una recensione viene
-    			 * rimossa quella precedente ed inserita quella
-    			 * nuova
-    			 */
-    			recensioni.remove(r);
-    		}
+    	/* 
+		 * Se l'utente ha gia inserito una recensione viene
+		 * rimossa quella precedente ed inserita quella
+		 * nuova
+		 */
+    	for (Iterator<Recensione> iterator = recensioni.iterator(); 
+    			iterator.hasNext();) {
+    	    Recensione rece = iterator.next();
+    	    if (rece.getAutore().equals(recensione.getAutore())) {
+    	        iterator.remove();
+    	    }
     	}
     	recensioni.add(recensione);
     }
@@ -105,22 +109,54 @@ public abstract class Articolo {
      * Rimozione di una recensione di un utente
      *
      * @param autore autore della recensione da rimuovere
+     * @return boolean true se la rimozione e' avvenuta correttamente
+     * altrimenti false
      */
-    public void rimuoviRecensione ( UtenteRegistrato autore ) {
-    	for (Recensione r: recensioni) {
-    		if (r.getAutore().equals(autore)) {
-    			this.recensioni.remove(r);
-    		}
+    public boolean rimuoviRecensione ( UtenteRegistrato autore ) {
+    	for (Iterator<Recensione> iterator = recensioni.iterator(); 
+    			iterator.hasNext();) {
+    	    Recensione recensione = iterator.next();
+    	    if (recensione.getAutore().equals(autore)) {
+    	        iterator.remove();
+    	        return true;
+    	    }
     	}
+    	return false;
+    }
+    
+    /**
+     * Modifica di una recensione di un utente
+     *
+     * @param autore autore della recensione da modificare
+     * @param recensioneNuova nuova recensione da inserire
+     * @return boolean true se la modifica e' avvenuta correttamente
+     * false altrimenti
+     */
+    public boolean modificaRecensione ( UtenteRegistrato autore, 
+    		String recensioneNuova ) {
+    	if (recensioneNuova.length() > 20) {
+    		return false;
+    	}
+    	for (Iterator<Recensione> iterator = recensioni.iterator(); 
+    			iterator.hasNext();) {
+    	    Recensione recensione = iterator.next();
+    	    if (recensione.getAutore().equals(autore)) {
+    	        recensione.setTesto(recensioneNuova);
+    	        return true;
+    	    }
+    	}
+    	return false;
     }
     
     /**
      * Prenotazione di un articolo
      *
      * @param utente utente che desidera prenotare
-     * @return boolean
+     * @return boolean true se la prenotazione e' avvenuta correttamente
+     * false altrimenti
      */
     public boolean prenota ( UtenteRegistrato utente ) {
+    	utente.inserisciPrenotazione(this);
     	if (this.prenotato.contains(utente)) {
     		return false;
     	}
@@ -132,7 +168,8 @@ public abstract class Articolo {
      * Rimuove la prenotazione di un determinato utente
      *
      * @param utente utente del quale si vuole rimuovere la recensione
-     * @return boolean
+     * @return boolean true se la rimozione e' avvenuta correttamente
+     * false altrimenti
      */
     public boolean rimuoviPrenotazione ( UtenteRegistrato utente ) {
     	if (this.prenotato.contains(utente)) {
@@ -148,10 +185,17 @@ public abstract class Articolo {
      *
      * @param testo testo nuova recensione
      * @param autore autore nuova recensione
+     * @return boolean se la recensione e' scritta correttamente
+     * false altrimenti
      */
-    public void scriviRecensione ( String testo, UtenteRegistrato autore){
-    	Recensione r = new Recensione(testo, autore);
+    public boolean scriviRecensione ( String testo, UtenteRegistrato autore){
+    	if (testo.length() > 20)
+    		return false;
+    	Recensione r = new Recensione();
+    	r.setAutore(autore);
+    	r.setTesto(testo);
     	inserisciRecensione(r);
+    	return recensioni.contains(r);
     }
     
     
@@ -194,7 +238,7 @@ public abstract class Articolo {
 	/**
 	 * Gets genere.
 	 *
-	 * @return genere
+	 * @return String
 	 */
 	public String getGenere() {
 		return genere;
@@ -270,5 +314,14 @@ public abstract class Articolo {
 	 */
 	public Prestito getPrestito() {
 		return prestito;
+	} 
+	
+	/**
+	 * Sets prestito.
+	 *
+	 * @param prestito oggetto prestito
+	 */
+	public void setPrestito(Prestito prestito) {
+		this.prestito = prestito;
 	}   
 }
